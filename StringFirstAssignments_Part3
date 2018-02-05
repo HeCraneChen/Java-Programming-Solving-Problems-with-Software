@@ -1,0 +1,66 @@
+
+/**
+ * Write a description of Part3 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class Part3 {
+   public String twoOccurrences(String stringa, String stringb){
+        String result = "";
+        int one = stringb.indexOf (stringa);
+        if (one == -1)
+        {result = "false";
+        }
+        int length = stringa.length();
+        int two = stringb.indexOf (stringa, one+length);
+        if (two == -1)
+        {result = "false";
+        } 
+        if((one != -1)&&(two != -1))
+        {result = "true";
+        }
+      
+        return result;
+    }
+    public String lastPart(String stringa, String stringb){
+        String result = "";
+        int flag = stringb.indexOf (stringa);
+        if (flag == -1)
+        {result = stringb;
+        }
+        
+        if (flag != -1)
+        {
+          int position = stringb.indexOf(stringa);
+          int length = stringa.length();
+          int wholelength = stringb.length();
+          result = stringb.substring (position+length, wholelength);
+        }
+        return result;
+    }
+    
+    
+     public void testtwoOccurrences() {
+        String stringa = "atg";
+        String stringb = "ctgtatgta";
+        String answer = twoOccurrences(stringa, stringb);
+        System.out.println("The answer of ctgtatgta is " + answer);
+        
+        String stringa1 = "by";
+        String stringb1 = "A story by Abby Long";
+        String answer1 = twoOccurrences(stringa1, stringb1);
+        System.out.println("The answer of A story by Abby Long is " + answer1);
+        
+        String stringa2 = "an";
+        String stringb2 = "banana";
+        String answer2 = lastPart(stringa2, stringb2);
+        System.out.println("The part of the string after an in banana is " + answer2);
+        
+        String stringa3 = "zoo";
+        String stringb3 = "forest";
+        String answer3 = lastPart(stringa3, stringb3);
+        System.out.println("The part of the string after zoo in forest is " + answer3);
+        
+      }
+}
