@@ -1,0 +1,92 @@
+
+/**
+ * Write a description of Part1 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+import edu.duke.*;
+import java.io.*;
+
+public class Part1 {
+    public int findStopCodon(String dna, int startIndex, String stopCodon){
+        int stopIndex = 0;
+        stopIndex = dna.indexOf(stopCodon,startIndex + 3);
+        if((stopIndex - startIndex - 3) % 3 != 0){
+            stopIndex = -1;        
+        }
+        if((startIndex != -1) && (stopIndex != -1)){
+            return stopIndex;
+        }
+        else{
+            return dna.length();
+        }    
+    }
+    
+    public String findGene(String dna){
+        int startIndex = dna.indexOf("ATG");
+        if(startIndex == -1){
+            return " ";
+        }
+        else{
+            int taaIndex = findStopCodon(dna, startIndex, "TAA");
+            int tagIndex = findStopCodon(dna, startIndex, "TAG");
+            int tgaIndex = findStopCodon(dna, startIndex, "TGA");
+            //int minIndex = Math.min(taaIndex, Math.min(tagIndex, tgaIndex));
+            int minIndex = Math.min(taaIndex, tagIndex);
+            minIndex = Math.min(minIndex, tgaIndex);
+            if(minIndex != dna.length()){
+                String gene = dna.substring(startIndex, minIndex + 3);
+                return gene;
+            }
+            else{
+                return " ";
+            }
+        }
+    }
+    
+    public String printAllGenes(){
+        String gene = " ";
+        String dna = "ATGAAAAAATGAATGTAATAGATGTGA";
+        String remain = dna;
+        int remainIndex = 0;
+        int stopIndex = 0;
+        while(true){
+            gene = findGene(remain);
+            remainIndex = dna.indexOf(gene);
+            remain = dna.substring(remainIndex + gene.length(), dna.length());
+            System.out.println("The genes of dna include " + gene);
+            if(remain.isEmpty()){
+                break;
+            }
+        }
+        return " ";
+    }
+    
+    public void testFindStopCodon(){
+        String dna = "GGGAAAAAATAA";
+        int startIndex = dna.indexOf("ATG");
+        String stopCodon = "TAA";
+        int stopIndex = findStopCodon(dna, startIndex, stopCodon);
+        System.out.println("The stop index of dna is " + stopIndex);    
+    }
+    
+    public void testFindGene(){
+        String dna = "GGGAAAAAATAA";
+        String gene = findGene(dna);
+        System.out.println("The gene of dna is " + gene);
+        
+        String dna1 = "ATGAAAAAA";
+        String gene1 = findGene(dna1);
+        System.out.println("The gene of dna1 is " + gene1);
+        
+        String dna2 = "ATGAAAAAATAA";
+        String gene2 = findGene(dna2);
+        System.out.println("The gene of dna2 is " + gene2);
+        
+        String dna3 = "ATGAAAAAATGATAATAGTGA";
+        String gene3 = findGene(dna3);
+        System.out.println("The gene of dna2 is " + gene3);
+                
+    }
+}
