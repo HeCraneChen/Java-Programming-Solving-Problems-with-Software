@@ -1,0 +1,218 @@
+
+/**
+ * Write a description of Craneproject here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+import edu.duke.*;
+import org.apache.commons.csv.*;
+import java.io.File;
+
+public class Craneproject {
+    public void totalBirths(FileResource fr){
+        int totalBirth = 0;
+        int numberGN = 0;
+        int numberBN = 0;
+        int numberN = 0;
+        for(CSVRecord rec:fr.getCSVParser(false)){
+            int numBorn = Integer.parseInt(rec.get(2));
+            totalBirth += numBorn;
+            if((rec.get(1)).equals("F")){
+                numberGN = numberGN + 1;
+            }
+            if((rec.get(1)).equals("M")){
+                numberBN = numberBN + 1;
+            }
+            numberN = numberN + 1;
+        }
+        System.out.println("total birth = " + totalBirth);
+        System.out.println("number of girlname = " + numberGN);
+        System.out.println("number of boyname = " + numberBN);
+        System.out.println("number of name = " + numberN);
+    }
+    
+    public int getRank(String year, String name, String gender){
+        int rank = 1;
+        int number = 0;
+        String fname = "us_babynames_by_year/yob" + year + ".csv";
+        FileResource fr = new FileResource(fname);
+        CSVParser parser = fr.getCSVParser(false);
+        for(CSVRecord rec:parser){
+            //System.out.println(rec.get(2));
+            if((rec.get(0).equals(name)) && (rec.get(1).equals(gender))){
+                number = Integer.parseInt(rec.get(2));
+                //System.out.println("number equals " + number);
+            }
+        }
+        if(number == 0){
+            rank = -1;
+        }
+        else{
+            parser = fr.getCSVParser(false);
+            for(CSVRecord rec:parser){
+                //System.out.println("people include  " + rec.get(2));
+                if((Integer.parseInt(rec.get(2)) > number) && (rec.get(1).equals(gender))){
+                    //System.out.println(rec.get(2));
+                    rank = rank + 1;
+                }
+            }
+        }
+        return rank;
+    }
+    
+    public String getName(String year, int rank, String gender){
+        int count = 0;
+        int number = 0;
+        String name = "NO NAME";
+        String fname = "us_babynames_by_year/yob" + year + ".csv";
+        FileResource fr = new FileResource(fname);
+        CSVParser parser = fr.getCSVParser(false);
+        for(CSVRecord rec:parser){
+            if((rec.get(1)).equals(gender)){
+                count = count + 1;
+                if(count == rank){
+                name = rec.get(0);
+                number = Integer.parseInt(rec.get(2));
+                System.out.println("order equals " + count + " name equals " + name + " number equals " + number);
+                break;
+                }
+            }
+        }
+        return name;
+    }
+    
+    public void whatIsNameInYear(String name, String year, String newYear, String gender){
+        int rank = getRank(year, name, gender);
+        String newName = getName(newYear, rank, gender);
+        System.out.println("The new name is " + newName);
+    }
+    
+    public int yearOfHighestRank(String name, String gender){
+        int result = 999999999;
+        int rank = 1;
+        int number = 0;
+        String filename = " ";
+        DirectoryResource dr = new DirectoryResource();
+        for(File f:dr.selectedFiles()){
+            FileResource fr = new FileResource(f);
+            CSVParser parser = fr.getCSVParser(false);
+            for(CSVRecord rec:parser){
+             //System.out.println(rec.get(2));
+                if((rec.get(0).equals(name)) && (rec.get(1).equals(gender))){
+                    number = Integer.parseInt(rec.get(2));
+                //System.out.println("number equals " + number);
+                }
+            }
+            if(number == 0){
+                rank = -1;
+            }
+            else{
+                parser = fr.getCSVParser(false);
+                rank = 1;
+                for(CSVRecord rec:parser){
+                 //System.out.println("people include  " + rec.get(2));
+                    if(rec.get(0).equals(name)){
+                        break;
+                    }
+                    
+                    if((rec.get(1).equals(gender)) && (Integer.parseInt(rec.get(2)) > number)){
+                    //System.out.println(rec.get(2));
+                        rank = rank + 1;
+                    }
+                }
+            }
+            if((rank != -1) && (rank < result)){
+                result = rank;
+                filename = f.getName();
+            }
+        }
+        if(result != 999999999){
+            System.out.println("The file with highest rank is  " + filename);
+        }
+        else{
+            result = -1;
+            System.out.println("no such name exists");
+        }
+        return result;
+    }
+    
+    public double getAverageRank(String name, String gender){
+        int result = 0;
+        int rank = 1;
+        int number = 0;
+        int count = 0;
+        double average = 0.0;
+        String filename = " ";
+        DirectoryResource dr = new DirectoryResource();
+        for(File f:dr.selectedFiles()){
+            count = count + 1;
+            FileResource fr = new FileResource(f);
+            CSVParser parser = fr.getCSVParser(false);
+            for(CSVRecord rec:parser){
+             //System.out.println(rec.get(2));
+                if((rec.get(0).equals(name)) && (rec.get(1).equals(gender))){
+                    number = Integer.parseInt(rec.get(2));
+                    System.out.println("number equals " + number);
+                }
+            }
+            if(number == 0){
+                rank = -1;
+            }
+            else{
+                parser = fr.getCSVParser(false);
+                rank = 1;
+                for(CSVRecord rec:parser){
+                 //System.out.println("people include  " + rec.get(2));
+                    if(rec.get(0).equals(name)){
+                        break;
+                    }
+                    if((rec.get(1).equals(gender)) && (Integer.parseInt(rec.get(2)) >= number)){
+                        System.out.println(rec.get(2));
+                        rank = rank + 1;
+                    }
+                }
+            }
+            System.out.println("rank equals  " + rank);
+            System.out.println("result equals  " + result);
+            result = result + rank;
+        }
+        System.out.println("count equals  " + count);
+        average = (float)result / count;
+        return average;
+    }
+    
+    public int getTotalBirthsRankedHigher(String year, String name, String gender){
+        int total = 0;
+        FileResource fr = new FileResource();
+        CSVParser parser = fr.getCSVParser(false);
+        for(CSVRecord rec:parser){
+            if((rec.get(1)).equals(gender)){
+                if(!(rec.get(0)).equals(name)){
+                    total = total + Integer.parseInt(rec.get(2));
+                }
+                else{
+                    break;
+                }
+            }
+           
+        }
+        return total;
+    }
+    
+    public void testBirth(){
+        /*FileResource fr = new FileResource();
+        totalBirths(fr);
+        int rank = getRank("1960", "Emily", "F");
+        System.out.println("The rank of Emily is " + rank);
+        String name = getName("1982", 450, "M");
+        System.out.println("The name with the rank 450 in 1982 is " + name);
+        whatIsNameInYear("Owen", "1974", "2014", "M");*/
+        int result = yearOfHighestRank("Mich", "M");
+        //double average = getAverageRank("Robert", "M");
+        //System.out.println("The average rank of all these years is  " + average);
+        int total = getTotalBirthsRankedHigher("1990", "Drew", "M");
+        System.out.println("total birth higher than Drew equals  " + total);
+    }
+
+}
