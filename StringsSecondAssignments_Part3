@@ -1,0 +1,113 @@
+
+/**
+ * Write a description of Part3 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+import edu.duke.*;
+import java.io.*;
+
+public class Part3 {
+    //find one gene
+    public int findStopCodon(String dna, int startIndex, String stopCodon){
+        int stopIndex = 0;
+        stopIndex = dna.indexOf(stopCodon,startIndex + 3);
+        if((stopIndex - startIndex - 3) % 3 != 0){
+            stopIndex = -1;        
+        }
+        if((startIndex != -1) && (stopIndex != -1)){
+            return stopIndex;
+        }
+        else{
+            return dna.length();
+        }    
+    }
+    
+    public String findGene(String dna){
+        int startIndex = dna.indexOf("ATG");
+        if(startIndex == -1){
+            return " ";
+        }
+        else{
+            int taaIndex = findStopCodon(dna, startIndex, "TAA");
+            int tagIndex = findStopCodon(dna, startIndex, "TAG");
+            int tgaIndex = findStopCodon(dna, startIndex, "TGA");
+            //int minIndex = Math.min(taaIndex, Math.min(tagIndex, tgaIndex));
+            int minIndex = Math.min(taaIndex, tagIndex);
+            minIndex = Math.min(minIndex, tgaIndex);
+            if(minIndex != dna.length()){
+                String gene = dna.substring(startIndex, minIndex + 3);
+                return gene;
+            }
+            else{
+                return " ";
+            }
+        }
+    }
+    //find one gene
+    //print all genes
+    public String printAllGenes(String dna){
+        String gene = " ";
+        String remain = dna;
+        int remainIndex = 0;
+        int stopIndex = 0;
+        while(true){
+            gene = findGene(remain);
+            remainIndex = dna.indexOf(gene);
+            remain = dna.substring(remainIndex + gene.length(), dna.length());//youyiwen
+            System.out.println("The genes of DNA include " + gene);
+            if((gene == " ") || remain.isEmpty()){
+                break;
+            }
+        }
+        return " ";
+    }
+    //print all genes
+    
+    public int countGenes(String dna){
+        int count = 0;
+        int startIndex = -1;
+        String remain = dna;
+        String gene = " ";
+        //test
+        /*gene= findGene(remain);
+        startIndex = remain.indexOf(gene);
+        remain = remain.substring(startIndex + gene.length(), remain.length());
+        count = count + 1;
+        System.out.println("remain is " + remain);
+        System.out.println("aIndex is " + startIndex);
+        System.out.println("count is " + count);
+        
+        gene= findGene(remain);
+        startIndex = remain.indexOf(gene);
+        remain = remain.substring(startIndex + gene.length(), remain.length());
+        count = count + 1;
+        System.out.println("remain is " + remain);
+        System.out.println("aIndex is " + startIndex);
+        System.out.println("count is " + count);*/
+        //test
+        while(true){
+            gene= findGene(remain);
+            startIndex = remain.indexOf(gene);
+            remain = remain.substring(startIndex + gene.length(), remain.length());
+            if(startIndex != -1){
+                count = count + 1;
+            }
+            //System.out.println("remain is " + remain);
+            //System.out.println("startIndex is " + startIndex);
+            if((gene == " ") || remain.isEmpty()){
+                break;
+            }
+        }
+        System.out.println("COUNT is " + count);
+        return count;
+    }
+    
+    public void testCountGenes(){
+        String dna = "ATGTAAGATGCCCTAGT";
+        //String gene = printAllGenes(dna);
+        int count = countGenes(dna);
+    }
+
+}
