@@ -1,0 +1,50 @@
+
+/**
+ * Write a description of Part1 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+import edu.duke.*;
+import java.io.*;
+
+public class Part1 {
+    public String findSimpleGene(String dna){
+        String result = "";
+        int startP = dna.indexOf ("ATG");
+        if (startP == -1)
+        {result = "";
+        }
+        int endP = dna.indexOf ("TAA", startP+3);
+        if (endP == -1)
+        {result = "";
+        } 
+        if ( (endP - startP) % 3 == 0)
+        {result = dna.substring (startP, endP+3);
+        }
+        return result;
+    }
+    
+    
+     public void testSimpleGene() {
+        String dna = "ATGTAA";
+        System.out.println("The dna is " + dna);
+        String gene = findSimpleGene(dna);
+        System.out.println("The gene is " + gene);  
+        
+        String dna1 = "CCGTATGCTATAAGG";
+        System.out.println("The dna1 is " + dna1);
+        String gene1 = findSimpleGene(dna1);
+        System.out.println("The gene1 is " + gene1);  
+        
+        String dna2 = "CCGTATGCGTATAAGG";
+        System.out.println("The dna2 is " + dna2);
+        String gene2 = findSimpleGene(dna2);
+        System.out.println("The gene2 is " + gene2); 
+        
+        String dna3 = "AAATGCCCTAACTAGATTAAGAAACC";
+        System.out.println("The dna3 is " + dna3);
+        String gene3 = findSimpleGene(dna3);
+        System.out.println("The gene3 is " + gene3);  
+      }
+    }
