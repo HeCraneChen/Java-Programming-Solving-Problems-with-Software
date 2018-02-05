@@ -1,0 +1,71 @@
+
+
+/**
+ * Write a description of Part2 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+import edu.duke.*;
+import java.io.*;
+
+public class Part2 {
+    public String findSimpleGene(String dna, String startCodon, String stopCodon){
+        int upCase = 1;
+        String result = "";
+        String dnaAnti = dna.toLowerCase();
+        if(dna.equals(dnaAnti)){
+            upCase = 0;
+            startCodon = "atg";
+            stopCodon = "taa";
+        }
+            
+        int startP = dna.indexOf (startCodon);
+        if (startP == -1)
+        {result = "";
+        }
+        int endP = dna.indexOf (stopCodon, startP+3);
+        if (endP == -1)
+        {result = "";
+        } 
+        if ( (endP - startP) % 3 == 0)
+        {result = dna.substring (startP, endP+3);
+        }
+        return result;
+    }
+    
+    
+     public void testSimpleGene() {
+        String startCodon = "ATG";
+        String stopCodon = "TAA";
+        String dna = "ATGTAA";
+        System.out.println("The dna is " + dna);
+        String gene = findSimpleGene(dna, startCodon, stopCodon);
+        System.out.println("The gene is " + gene);  
+        
+        String dna1 = "CCGTATGCTATAAGG";
+        System.out.println("The dna1 is " + dna1);
+        String gene1 = findSimpleGene(dna1, startCodon, stopCodon);
+        System.out.println("The gene1 is " + gene1);  
+        
+        String dna2 = "CCGTATGCGTATAAGG";
+        System.out.println("The dna2 is " + dna2);
+        String gene2 = findSimpleGene(dna2, startCodon, stopCodon);
+        System.out.println("The gene2 is " + gene2); 
+        
+        String dna3 = "CCGTCTATGGG";
+        System.out.println("The dna3 is " + dna3);
+        String gene3 = findSimpleGene(dna3, startCodon, stopCodon);
+        System.out.println("The gene3 is " + gene3);  
+        
+        String dna4 = "ccgtatgctataagg";
+        System.out.println("The dna1 is " + dna4);
+        String gene4 = findSimpleGene(dna4, startCodon, stopCodon);
+        System.out.println("The gene1 is " + gene4);
+        
+        String dna5 = "ccgtctatggg";
+        System.out.println("The dna5 is " + dna5);
+        String gene5 = findSimpleGene(dna5, startCodon, stopCodon);
+        System.out.println("The gene3 is " + gene5); 
+      }
+    }
