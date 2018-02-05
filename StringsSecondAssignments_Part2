@@ -1,0 +1,63 @@
+
+/**
+ * Write a description of Part2 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+import edu.duke.*;
+import java.io.*;
+
+public class Part2 {
+    public int howMany(String stringa, String stringb){
+        int aIndex = -1;
+        int count = 0;
+        String remain = stringb;
+        /*//test
+        aIndex = remain.indexOf(stringa);
+        remain = remain.substring(aIndex + stringa.length(), remain.length());
+        System.out.println("remain is " + remain);
+        System.out.println("aIndex is " + aIndex);
+        
+        aIndex = remain.indexOf(stringa);
+        remain = remain.substring(aIndex + stringa.length(), remain.length());
+        System.out.println("remain is " + remain);
+        System.out.println("aIndex is " + aIndex);
+        
+        aIndex = remain.indexOf(stringa);
+        remain = remain.substring(aIndex + stringa.length(), remain.length());
+        System.out.println("remain is " + remain);
+        System.out.println("aIndex is " + aIndex);
+        
+        aIndex = remain.indexOf(stringa);
+        remain = remain.substring(aIndex + stringa.length(), remain.length());
+        System.out.println("remain is " + remain);
+        System.out.println("aIndex is " + aIndex);
+        //test*/
+        while(true){
+            aIndex = remain.indexOf(stringa);
+            if(aIndex != -1){
+                 count = count + 1;
+                 System.out.println("count is " + count);
+                remain = remain.substring(aIndex + stringa.length(), remain.length());
+            }
+            if((aIndex == -1) || (remain.isEmpty())){
+                break;
+            }
+        }
+        return count;
+    }
+    
+    public void testHowMany(){
+        String stringb = "ATGAACGAATTGAATC";
+        String stringa = "GAA";
+        int count1 = howMany(stringa, stringb);
+        System.out.println("The number of GAA is " + count1);
+        
+        stringb = "ATAAAA";
+        stringa = "AA";
+        int count2 = howMany(stringa, stringb);
+        System.out.println("The number of AA is " + count2);
+    }
+
+}
