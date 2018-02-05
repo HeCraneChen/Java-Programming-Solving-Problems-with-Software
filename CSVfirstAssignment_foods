@@ -1,0 +1,67 @@
+
+/**
+ * Write a description of foods here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+import edu.duke.*;
+import org.apache.commons.csv.*;
+
+public class foods {
+    public void tester(){
+        FileResource fr = new FileResource();
+        CSVParser parser = fr.getCSVParser();
+        String Info = countryInfo(parser, "Nauru");
+        System.out.println(" Info of the country is " + Info);
+        parser = fr.getCSVParser();
+        listExportersTwoProducts(parser, "cotton", "flowers");
+        parser = fr.getCSVParser();
+        int count = numberOfExporters(parser, "cocoa");
+        System.out.println(" The number of country that export cocoa is " + count);
+        parser = fr.getCSVParser();
+        bigExporters(parser, "$999,999,999,999");
+    }
+    
+    public String countryInfo(CSVParser parser, String country){
+        String Info = "NOT FOUND";
+        for(CSVRecord record:parser){
+            String name = record.get("Country");
+            if(name.contains(country)){
+                Info = record.get("Country") + ": " + record.get("Exports") + ": " + record.get("Value (dollars)");
+            }
+        }
+        return Info;
+    }
+    
+    public void listExportersTwoProducts(CSVParser parser, String exportItem1, String exportItem2){
+        for(CSVRecord record:parser){
+            String export = record.get("Exports");
+            if(export.contains(exportItem1) && export.contains(exportItem2)){
+                String country = record.get("Country");
+                System.out.println("The countries export cotton and flowers include " + country);
+            }
+        }
+    }
+    
+    public int numberOfExporters(CSVParser parser, String exportItem){
+        int count = 0;
+        for(CSVRecord record:parser){
+            String export = record.get("Exports");
+            if(export.contains(exportItem)){
+                count = count + 1;
+            }
+        }
+        return count;
+    }
+    
+    void bigExporters(CSVParser parser, String amount){
+        for(CSVRecord record:parser){
+            String value = record.get("Value (dollars)");
+            if(value.length() > amount.length()){
+                String country = record.get("Country");
+                System.out.println("The big exporters include " + country + " " + value);   
+            }
+        }
+    }
+}
